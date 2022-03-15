@@ -49,11 +49,15 @@ void Medicine::init()
     //读取配置
     QString initHunyuan = m_psetting->value("bag/hunyuan").toString();
     QString initNingqi = m_psetting->value("bag/ningqi").toString();
-    //添加仓库
+    QString initMoney = m_psetting->value("bag/money").toString();
+    //添加库存
+    //丹药库存
     QTreeWidgetItem * hunyuan = new QTreeWidgetItem(QStringList()<< "混元丹" << initHunyuan);
     QTreeWidgetItem * ningqi = new QTreeWidgetItem(QStringList()<< "凝气丹" << initNingqi);
     ui->bagList->addTopLevelItem(hunyuan);
     ui->bagList->addTopLevelItem(ningqi);
+    //剩余灵石
+    ui->money->setText(initMoney);
 }
 
 Medicine::~Medicine()
@@ -74,17 +78,25 @@ void Medicine::onActionUse()
     QTreeWidgetItem * item = ui->bagList->currentItem();
 
     //弹出询问对话框
-    if (QMessageBox::Yes == QMessageBox::question(this, QStringLiteral("使用丹药"),
+    if(QMessageBox::Yes == QMessageBox::question(this, QStringLiteral("使用丹药"),
         QStringLiteral("使用1个%1？").arg((item->text(0))), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes))
     {
         //如果选择Yes
         int count = item->text(1).toInt();
         qDebug() << "使用前丹药数量：" << count;
-        //减去一个丹药库存
-        count--;
-        //int -> QString
-        QString strCount = QString::number(count);
-        item->setText(1,strCount);
+        if(count < 1)
+        {
+            //如果丹药数量为零，弹窗报错
+            QMessageBox::warning(this, "错误", "没有足够的丹药", QMessageBox::Ok , QMessageBox::Ok);
+        }
+        else
+        {
+            //减去一个丹药库存
+            count--;
+            //int -> QString
+            QString strCount = QString::number(count);
+            item->setText(1,strCount);
+        }
     }
 }
 
@@ -95,16 +107,29 @@ void Medicine::onActionBuy()
     QTreeWidgetItem * item = ui->bagList->currentItem();
 
     //弹出询问对话框
-    if (QMessageBox::Yes == QMessageBox::question(this, QStringLiteral("购买丹药"),
-        QStringLiteral("购买1个%1？").arg((item->text(0))), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes))
+    if(QMessageBox::Yes == QMessageBox::question(this, QStringLiteral("购买丹药"),
+        QStringLiteral("花费100灵石\n购买1个%1？").arg((item->text(0))), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes))
     {
         //如果选择Yes
+        //获取购买前数量
         int count = item->text(1).toInt();
         qDebug() << "购买前丹药数量：" << count;
-        //增加一个丹药库存
-        count++;
-        //int -> QString
-        QString strCount = QString::number(count);
-        item->setText(1,strCount);
+        //获取余额
+        balance = ui->money->text().toInt();
+        if(balance >= 100)
+        {
+            //余额足够
+            //扣钱
+            balance -= 100;
+            //int -> QString
+            QString strBalance = QString::number(balance);
+            ui->money->setText(strBalance);
+            //增加一个丹药库存
+            count++;
+            //int -> QString
+            QString strCount = QString::number(count);
+            item->setText(1,strCount);
+        }
+
     }
 }

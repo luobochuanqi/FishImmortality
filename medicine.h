@@ -34,6 +34,8 @@ private:
 
     void init();
 
+    int balance;//钱
+
     QMenu *popMenuInListWidget;/*弹出菜单*/
     QAction *actionUseInListWidget;/*菜单上的Action*/
     QAction *actionBuyInListWidget;/*菜单上的Action*/

@@ -18,15 +18,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainw.cpp \
-    medicine.cpp
+    medicine.cpp \
+    register.cpp
 
 HEADERS += \
     mainw.h \
-    medicine.h
+    medicine.h \
+    register.h
 
 FORMS += \
     mainw.ui \
-    medicine.ui
+    medicine.ui \
+    register.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -34,5 +37,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    README.md \
     境界划分.jpg

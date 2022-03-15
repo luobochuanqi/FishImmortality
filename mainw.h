@@ -10,6 +10,7 @@
 #include <QTimer>
 #include <QMessageBox>
 #include <medicine.h>
+#include <register.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainW; }
@@ -33,6 +34,8 @@ private slots:
 
     void on_magicWeapons_clicked();
 
+    void on_register__clicked();
+
 private:
     Ui::MainW *ui;
     void startProTimer();
@@ -42,5 +45,11 @@ private:
     int proSpeed;
     //丹药子窗口对象
     Medicine medicineWidget;
+    //昵称编辑子窗口对象
+    Register regWidget;
+    //境界判断，改变显示境界
+    void levelJudge();
+    //境界改变
+    int newLevel = 0;
 };
 #endif // MAINW_H
