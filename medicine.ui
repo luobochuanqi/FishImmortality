@@ -13,44 +13,11 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QListWidget" name="shopList">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>30</y>
-     <width>211</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>混元丹</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>凝气丹</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QLabel" name="shop">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>5</y>
-     <width>31</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>商店</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="bag">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>105</y>
+     <y>0</y>
      <width>31</width>
      <height>21</height>
     </rect>
@@ -63,9 +30,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>130</y>
+     <y>20</y>
      <width>211</width>
-     <height>101</height>
+     <height>211</height>
     </rect>
    </property>
    <column>
