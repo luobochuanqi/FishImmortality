@@ -24,6 +24,9 @@ public:
     MainW(QWidget *parent = nullptr);
     ~MainW();
 
+    //昵称修改信号
+    void registered();
+
 private slots:
 
     void start();
@@ -40,6 +43,7 @@ private:
     Ui::MainW *ui;
     void startProTimer();
     void init();
+    //进度条计时器
     QTimer *proTimer;
     int tick;
     int proSpeed;
@@ -51,5 +55,9 @@ private:
     void levelJudge();
     //境界改变
     int newLevel = 0;
+    //保存配置函数
+    void saveAllConfig();
+    //配置
+    QSettings * m_psetting = nullptr;
 };
 #endif // MAINW_H

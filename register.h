@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QDebug>
+#include <QSettings>
 
 namespace Ui {
 class Register;
@@ -16,7 +17,12 @@ public:
     explicit Register(QWidget *parent = nullptr);
     ~Register();
 
-    QString nameReturn = "无返回值";
+    QString nameReturn = "未知";
+
+signals:
+
+    void reNamed();
+
 
 private slots:
     void on_ok_clicked();
