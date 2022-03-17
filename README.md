@@ -9,7 +9,7 @@
 ##  ▪境界划分
 ![境界划分](https://raw.githubusercontent.com/luobochuanqi/FishImmortality/main/static/Level.jpg)
 ##  ▪丹药修炼加持系统
-![丹药](https://raw.githubusercontent.com/luobochuanqi/FishImmortality/main/static/Screen_2.jpg)
+![丹药](https://raw.githubusercontent.com/luobochuanqi/FishImmortality/main/static/Screen_2.png)
 ##  ▪开源
 ##  ▪使用QT开发
 ##  ▪持续保持更新
