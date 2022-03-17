@@ -37,4 +37,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    static/Level.jpg \
+    static/Screen_1.png \
     境界划分.jpg

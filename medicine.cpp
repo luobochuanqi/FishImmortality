@@ -130,6 +130,5 @@ void Medicine::onActionBuy()
             QString strCount = QString::number(count);
             item->setText(1,strCount);
         }
-
     }
 }
