@@ -168,7 +168,7 @@ void MainW::start()
         //境界判断，更改显示
         levelJudge();
         //修改修炼速度
-        proSpeed = int(proSpeed * 2);
+        proSpeed = int(proSpeed * 4);
         proTimer->start(proSpeed);
     }
 }

@@ -14,6 +14,8 @@ Medicine::Medicine(QWidget *parent) :
     //设置窗口标题
     setWindowTitle("丹药");
 
+    //设置窗口图标
+    setWindowIcon(QIcon(":/ico.ico"));
 
     //listwidget右键菜单
     //重要：设置QListWidget的contextMenuPolicy属性，不然不能显示右键菜单

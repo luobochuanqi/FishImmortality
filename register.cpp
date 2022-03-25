@@ -9,6 +9,9 @@ Register::Register(QWidget *parent) :
 
     //设置窗口标题
     setWindowTitle("请输入你的昵称");
+
+    //设置窗口图标
+    setWindowIcon(QIcon(":/ico.ico"));
 }
 
 Register::~Register()
