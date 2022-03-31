@@ -37,6 +37,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    Logo.rc \
     README.md \
     static/Level.jpg \
     static/Screen_1.png \
@@ -45,3 +46,5 @@ DISTFILES += \
 
 RESOURCES += \
     image.qrc
+
+RC_FILE += logo.rc
