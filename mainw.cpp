@@ -17,13 +17,21 @@ MainW::MainW(QWidget *parent)
 
     //进度条
     //初始化边界
-    int num = 100;
-    ui->progressBar->setRange(0, num);
+//    progressBarBoundary = 100;
+    ui->progressBar->setRange(0, proBarBoundary);
+    //初始化显示
+    /*
+     * %v - 被当前值所取代
+     * %m - 被总步数所取代
+     */
+    ui->progressBar->setFormat(" %v / %m");
     //程序打开，启动进度条
     startProTimer();
 
     //在子窗口更改昵称，主窗口昵称刷新
     connect(&regWidget, &Register::reNamed, this, &MainW::registered);
+    //在丹药子窗口使用混元丹，主窗口增加修炼进度
+    connect(&medicineWidget, &Medicine::hunyuanUsed, this, &MainW::hunyuanUse);
 }
 
 MainW::~MainW()
@@ -37,7 +45,7 @@ void MainW::init(){
     QCoreApplication::applicationDirPath(); //获取可执行文件所在路径
     QString configFileName = QCoreApplication::applicationDirPath() + "/Config.ini";
     //根据Config.ini路径new QSetting对象
-    m_psetting = new QSettings(configFileName, QSettings::IniFormat);
+    myConfig = new QSettings(configFileName, QSettings::IniFormat);
     //判断Config.ini是否存在，若不存在则再可执行文件的同级目录下创建一个Config.ini
     QFileInfo fileInfo(configFileName);
     if(!fileInfo.exists())
@@ -45,34 +53,34 @@ void MainW::init(){
         //打印创建文件的路径
         qDebug("%s 不存在。", configFileName.toLatin1().data());
         //写入默认值
-        m_psetting->beginGroup("player");
-        m_psetting->setValue("name", "未知");
-        m_psetting->setValue("level", 0);
-        m_psetting->setValue("progress", 0);
-        m_psetting->setValue("martialmethod", 0);
-        m_psetting->setValue("proSpeed", 40);
-        m_psetting->endGroup();
-        m_psetting->beginGroup("bag");
-        m_psetting->setValue("hunyuan", 0);
-        m_psetting->setValue("ningqi", 0);
-        m_psetting->setValue("money", 500);
+        myConfig->beginGroup("player");
+        myConfig->setValue("name", "未知");
+        myConfig->setValue("level", 0);
+        myConfig->setValue("progress", 0);
+        myConfig->setValue("martialmethod", 0);
+        myConfig->setValue("proSpeed", 40);
+        myConfig->endGroup();
+        myConfig->beginGroup("bag");
+        myConfig->setValue("hunyuan", 0);
+        myConfig->setValue("ningqi", 0);
+        myConfig->setValue("money", 500);
     }
 
     //读取配置
-    QString initName = m_psetting->value("player/name").toString();
-    int initProgress = m_psetting->value("player/progress").toInt();
-    int initLevel = m_psetting->value("player/level").toInt();
-    int initMartialMethod = m_psetting->value("player/martialmethod").toInt();
-    int initHunyuan = m_psetting->value("bag/hunyuan").toInt();
-    int initNingqi = m_psetting->value("bag/ningqi").toInt();
-    int initMoney = m_psetting->value("bag/money").toInt();
+    QString initName = myConfig->value("player/name").toString();
+    int initProgress = myConfig->value("player/progress").toInt();
+    int initLevel = myConfig->value("player/level").toInt();
+    int initMartialMethod = myConfig->value("player/martialmethod").toInt();
+    int initHunyuan = myConfig->value("bag/hunyuan").toInt();
+    int initNingqi = myConfig->value("bag/ningqi").toInt();
+    int initMoney = myConfig->value("bag/money").toInt();
 
     //输出日志
     qDebug() << "昵称：" << initName;
     qDebug() << "进度：" << initProgress;
     qDebug() << "境界：" << initLevel;
     qDebug() << "功法：" << initMartialMethod;
-    qDebug() << "修炼速度：" << m_psetting->value("player/proSpeed").toInt();
+    qDebug() << "修炼速度：" << myConfig->value("player/proSpeed").toInt();
     qDebug() << "混元丹：" << initHunyuan;
     qDebug() << "凝气丹：" << initNingqi;
     qDebug() << "钱：" << initMoney;
@@ -82,9 +90,10 @@ void MainW::init(){
     //如果已注册昵称则隐藏注册按钮
     if(initName != "未知")
     {
-        ui->register_->hide();
+        ui->regBtn->hide();
     }
     //境界初始化
+    newLevel = initLevel;
     if(initLevel == 0)
     {
         ui->stateLabel->setText("炼气");
@@ -123,7 +132,7 @@ void MainW::init(){
         ui->stateLabel->setText("配置读取出错，请尝试重启本软件");
     }
     //修炼速度初始化
-    proSpeed = m_psetting->value("player/proSpeed").toInt();
+    proSpeed = myConfig->value("player/proSpeed").toInt();
     //练功进度初始化
     ui->progressBar->setValue(initProgress);
     tick = initProgress;
@@ -155,8 +164,9 @@ void MainW::startProTimer()
 }
 void MainW::start()
 {
-    if(tick < 101)
+    if(tick < proBarBoundary+1)
     {
+        tick = ui->progressBar->value()+1;
         ui->progressBar->setValue(tick++);
     }
     else
@@ -168,7 +178,10 @@ void MainW::start()
         //境界判断，更改显示
         levelJudge();
         //修改修炼速度
-        proSpeed = int(proSpeed * 4);
+//        proSpeed = int(proSpeed * 4);
+        //修改进度条边界
+        proBarBoundary = proBarBoundary * int(pow(2,newLevel));
+        ui->progressBar->setRange(0, proBarBoundary);
         proTimer->start(proSpeed);
     }
 }
@@ -185,7 +198,7 @@ void MainW::on_medicine_clicked()
     medicineWidget.show();
 }
 
-void MainW::on_register__clicked()
+void MainW::on_regBtn_clicked()
 {
     //显示昵称编辑界面
     regWidget.show();
@@ -241,8 +254,18 @@ void MainW::levelJudge()
 //刷新昵称函数
 void MainW::registered()
 {
-    QString Name = m_psetting->value("player/name").toString();
+    QString Name = myConfig->value("player/name").toString();
     ui->name->setText(Name);
     //隐藏注册按钮
-    ui->register_->hide();
+    ui->regBtn->hide();
+}
+
+void MainW::hunyuanUse()
+{
+    //修炼进度增加100
+    int proValue = ui->progressBar->value();
+    qDebug() << proValue;
+    proValue += 100;
+    qDebug() << proValue;
+    ui->progressBar->setValue(proValue);
 }

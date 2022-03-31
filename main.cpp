@@ -1,3 +1,9 @@
+/*
+ * @Author: luobochuanqi
+ * @Date: 2022-04-01
+ * @Version: v1.0.1
+ */
+
 #include "mainw.h"
 
 #include <QApplication>

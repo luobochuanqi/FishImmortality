@@ -11,6 +11,7 @@
 #include <QMessageBox>
 #include <medicine.h>
 #include <register.h>
+#include <cmath>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainW; }
@@ -26,6 +27,10 @@ public:
 
     //昵称修改信号
     void registered();
+    //使用混元丹
+    void hunyuanUse();
+    //使用凝气丹
+    void ningqiUse();
 
 private slots:
 
@@ -37,7 +42,7 @@ private slots:
 
     void on_magicWeapons_clicked();
 
-    void on_register__clicked();
+    void on_regBtn_clicked();
 
 private:
     Ui::MainW *ui;
@@ -58,6 +63,8 @@ private:
     //保存配置函数
     void saveAllConfig();
     //配置
-    QSettings * m_psetting = nullptr;
+    QSettings * myConfig = nullptr;
+    //进度条边界
+    int proBarBoundary = 1500;
 };
 #endif // MAINW_H

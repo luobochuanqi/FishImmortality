@@ -43,15 +43,15 @@ Medicine::Medicine(QWidget *parent) :
 void Medicine::init()
 {
     //一个配置
-    QSettings * m_psetting = nullptr;
+    QSettings * myConfig = nullptr;
     QCoreApplication::applicationDirPath(); //获取可执行文件所在路径
     QString configFileName = QCoreApplication::applicationDirPath() + "/Config.ini";
     //根据Config.ini路径new QSetting对象
-    m_psetting = new QSettings(configFileName, QSettings::IniFormat);
+    myConfig = new QSettings(configFileName, QSettings::IniFormat);
     //读取配置
-    QString initHunyuan = m_psetting->value("bag/hunyuan").toString();
-    QString initNingqi = m_psetting->value("bag/ningqi").toString();
-    QString initMoney = m_psetting->value("bag/money").toString();
+    QString initHunyuan = myConfig->value("bag/hunyuan").toString();
+    QString initNingqi = myConfig->value("bag/ningqi").toString();
+    QString initMoney = myConfig->value("bag/money").toString();
     //添加库存
     //丹药库存
     QTreeWidgetItem * hunyuan = new QTreeWidgetItem(QStringList()<< "混元丹" << initHunyuan);
@@ -98,6 +98,8 @@ void Medicine::onActionUse()
             //int -> QString
             QString strCount = QString::number(count);
             item->setText(1,strCount);
+            //向主窗口发送使用丹药的信号
+            emit hunyuanUsed();
         }
     }
 }

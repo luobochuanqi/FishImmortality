@@ -164,7 +164,7 @@
       <string>未知</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="register_">
+    <widget class="QPushButton" name="regBtn">
      <property name="geometry">
       <rect>
        <x>130</x>

@@ -27,7 +27,10 @@ public slots:
     void onActionUse();
     void onActionBuy();
 
+signals:
 
+    void hunyuanUsed();
+    void ningqiUsed();
 
 private:
     Ui::Medicine *ui;
