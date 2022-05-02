@@ -58,13 +58,17 @@ private:
     Register regWidget;
     //境界判断，改变显示境界
     void levelJudge();
-    //境界改变
+    //境界改变对应
     int newLevel = 0;
     //保存配置函数
     void saveAllConfig();
     //配置
     QSettings * myConfig = nullptr;
     //进度条边界
-    int proBarBoundary = 1500;
+    int proBarBoundary = 20000;
+    //功法存储数组
+    QStringList * Methods;
+    //功法对应修炼速度
+    QVector<double> * MethodsVelocity();
 };
 #endif // MAINW_H

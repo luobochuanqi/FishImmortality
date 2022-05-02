@@ -32,6 +32,8 @@ MainW::MainW(QWidget *parent)
     connect(&regWidget, &Register::reNamed, this, &MainW::registered);
     //在丹药子窗口使用混元丹，主窗口增加修炼进度
     connect(&medicineWidget, &Medicine::hunyuanUsed, this, &MainW::hunyuanUse);
+    //在丹药子窗口使用凝气丹，主窗口增加修炼进度
+    connect(&medicineWidget, &Medicine::ningqiUsed, this, &MainW::ningqiUse);
 }
 
 MainW::~MainW()
@@ -137,20 +139,22 @@ void MainW::init(){
     ui->progressBar->setValue(initProgress);
     tick = initProgress;
     //功法初始化
+    //初始化功法存储数组
+    QStringList Methods;
+    Methods << "未知功法" << "人族修炼总纲" << "晨曦吐纳法" << "管理员的黑科技";
+    //初始化功法修炼速度数组
+    QVector<double> MethodsVelocity(505);
+    MethodsVelocity = {1,1.1,1.2,20};
+    //数组显示临时放置
     QStringList methods;
-    if(initMartialMethod == 1001)
-    {
-        methods << "晨曦吐纳法";
-        proSpeed = int(proSpeed / 1.1);
-    }
-    else if(initMartialMethod == 0)
-    {
-        methods << "人族修炼总纲";
-    }
-    else
-    {
-        methods << "未知功法";
-    }
+    //取个位
+    int unit = initMartialMethod % 10;
+    //添加功法
+    methods << Methods.at(unit);
+    //添加速度
+    qDebug() << "修炼速度除数：" << MethodsVelocity.at(unit);
+    proSpeed = int(proSpeed / MethodsVelocity.at(unit));
+//    methods << "未知功法";
     ui->MartialMethodList->addItems(methods);
 
 }
@@ -210,6 +214,7 @@ void MainW::on_magicWeapons_clicked()
     QMessageBox::information(this, "提示", "暂未开发，敬请期待", QMessageBox::Ok , QMessageBox::Ok);
 }
 
+//境界判断更新显示函数
 void MainW::levelJudge()
 {
     if(newLevel == 0)
@@ -260,12 +265,23 @@ void MainW::registered()
     ui->regBtn->hide();
 }
 
+//使用混元丹
 void MainW::hunyuanUse()
 {
     //修炼进度增加100
     int proValue = ui->progressBar->value();
     qDebug() << proValue;
     proValue += 100;
+    qDebug() << proValue;
+    ui->progressBar->setValue(proValue);
+}
+//使用凝气丹
+void MainW::ningqiUse()
+{
+    //修炼进度增加500
+    int proValue = ui->progressBar->value();
+    qDebug() << proValue;
+    proValue += 500;
     qDebug() << proValue;
     ui->progressBar->setValue(proValue);
 }

@@ -98,8 +98,16 @@ void Medicine::onActionUse()
             //int -> QString
             QString strCount = QString::number(count);
             item->setText(1,strCount);
-            //向主窗口发送使用丹药的信号
-            emit hunyuanUsed();
+            if(item->text(0) == "混元丹")
+            {
+                //向主窗口发送使用丹药的信号
+                emit hunyuanUsed();
+            }
+            else if(item->text(0) == "凝气丹")
+            {
+                //向主窗口发送使用丹药的信号
+                emit ningqiUsed();
+            }
         }
     }
 }
